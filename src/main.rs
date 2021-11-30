@@ -1,4 +1,4 @@
-
+use std::fs;
 use std::process;
 
 use clap::{Arg, App};
@@ -21,8 +21,17 @@ fn main() {
              .about("The part of the day to run")
              .required(true)
              .takes_value(true))
+        .arg(Arg::new("input")
+             .short('i')
+             .long("input")
+             .about("The path to the input")
+             .required(true)
+             .takes_value(true))
         .get_matches();
 
+
+    let input_path = matches.value_of("input").unwrap();
+    let input = &fs::read_to_string(input_path).expect(&format!("Could not find input at path: {}", input_path));
 
     // Should probably handle these more gracefully than just unwrapping
     // Also should probably check here if they are of the correct format.
@@ -33,8 +42,8 @@ fn main() {
     let result = match day {
         "1" => {
             match part {
-                "1" => adventofcode::days::day01::part1("test"),
-                "2" => adventofcode::days::day01::part2("test"),
+                "1" => adventofcode::days::day01::part1(input),
+                "2" => adventofcode::days::day01::part2(input),
                 _ => Err("Part not found")
             }
         },
