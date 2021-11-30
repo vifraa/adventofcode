@@ -1,3 +1,6 @@
+
+use std::process;
+
 use clap::{Arg, App};
 
 fn main() {
@@ -26,8 +29,25 @@ fn main() {
     let day = matches.value_of("day").unwrap();
     let part = matches.value_of("part").unwrap();
 
+    
+    let result = match day {
+        "1" => {
+            match part {
+                "1" => adventofcode::days::day01::part1("test"),
+                "2" => adventofcode::days::day01::part2("test"),
+                _ => Err("Part not found")
+            }
+        },
+        _ => Err("Day not found")
+    };
 
 
-
+    match result {
+        Ok(res) => println!("Day {}, Part {}: {}", day, part, res),
+        Err(e) => {
+            println!("Application error: {}", e);
+            process::exit(1);
+        }
+    }
 }
 
