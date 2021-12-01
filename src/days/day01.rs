@@ -4,18 +4,10 @@ pub fn part1(input: &str) -> Result<String, &str> {
         .map(|f| f.trim().parse::<i32>().unwrap())
         .collect();
 
-    let mut result = 0;
-    let mut previous_value: Option<i32> = None;
-    inputs.iter()
-        .for_each(|f| {
-            if let Some(value) = previous_value {
-                if f > &value {
-                    result += 1;
-                }
-            }
-            previous_value = Some(*f);
-        });
-
+    let result = inputs.windows(2)
+        .filter(|f| f[1] > f[0])
+        .count();
+    
     Ok(result.to_string())
 }
 
@@ -23,24 +15,14 @@ pub fn part2(input: &str) -> Result<String, &str> {
     let inputs: Vec<i32> = input.lines()
         .map(|f| f.trim().parse().unwrap())
         .collect();
-    
-    let mut result = 0;
-    let mut previous_value: Option<i32> = None;
-    for (i, value) in inputs.iter().enumerate() {
-        // Check if we are able to create 3 pair
-        if i+2 >= inputs.len() {
-            break;
-        }
 
-        let sum = value + inputs[i+1] + inputs[i+2];
-        if let Some(value) = previous_value {
-            if sum > value {
-                result += 1;
-            }
-        }
+    let window_sums: Vec<i32> = inputs.windows(3)
+        .map(|f| f[0] + f[1] + f[2])
+        .collect();
 
-        previous_value = Some(sum);
-    }
+    let result = window_sums.windows(2)
+        .filter(|f| f[1] > f[0])
+        .count();
 
     Ok(result.to_string())
 }
