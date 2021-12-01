@@ -1,5 +1,3 @@
-use std::os::unix::prelude::MetadataExt;
-
 
 pub fn part1(input: &str) -> Result<String, &str> {
     let inputs: Vec<i32> = input.lines()
