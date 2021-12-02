@@ -22,5 +22,6 @@ hyperfine --warmup 1 -r 100 "cargo run --release -- --day {day} --part {part} --
 
 | Day | Part A | Part B |
 | --- | --- | --- |
-| Day 1 | 95.5ms | 96.0ms |
+| Day 1 | 52.4ms (+- 0.9ms) | 52.5ms (+- 0.7ms) |
+|Day 2 | 52.2ms (+- 1.2ms) | 52.0ms (+- 1.0ms)|
 
