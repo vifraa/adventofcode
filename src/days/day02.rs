@@ -1,53 +1,61 @@
 
+enum Direction {
+    Forward(i32),
+    Down(i32),
+    Up(i32)
+}
+
 pub fn part1(input: &str) -> Result<String, &str> {
-    let split_input: Vec<Vec<&str>> = input.lines()
-        .map(|f| f.split_whitespace().collect())
-        .collect();
+    let split_input = parse_lines(input);
 
-    let horizontal_change: i32 = split_input.iter()
-        .filter(|f| f[0] == "forward")
-        .map(|f| f[1].parse::<i32>().unwrap())
-        .sum();
-
-    let vertical_change: i32 = split_input.iter()
-        .filter(|f| f[0] != "forward")
-        .map(|f| {
-            match f[0] {
-                "down" => f[1].parse::<i32>().unwrap(),
-                "up" => -f[1].parse::<i32>().unwrap(),
-                _ => 0
+    let mut horizontal = 0;
+    let mut vertical = 0;
+    split_input.iter()
+        .for_each(|f| {
+            match f {
+                Direction::Up(d) => vertical -= d,
+                Direction::Down(d) => vertical += d,
+                Direction::Forward(d) => horizontal += d
             }
-        }).sum();
-
-    Ok((horizontal_change * vertical_change).to_string())
+        });
+    
+    Ok((horizontal * vertical).to_string())
 }
 
 pub fn part2(input: &str) -> Result<String, &str> {
-    let split_input: Vec<Vec<&str>> = input.lines()
-        .map(|f| f.split_whitespace().collect())
-        .collect();
-
+    let split_input = parse_lines(input);
 
     let mut aim = 0;
     let mut horizontal = 0;
     let mut vertical = 0;
-    for s in split_input {
-        match s[0] {
-            "down" => {
-                aim += s[1].parse::<i32>().unwrap();
-            },
-            "up" => {
-                aim -= s[1].parse::<i32>().unwrap();
-            },
-            "forward" => {
-                horizontal += s[1].parse::<i32>().unwrap();
-                vertical += aim*s[1].parse::<i32>().unwrap();
-            },
-            _ => ()
-        };
-    }
+
+    split_input.iter()
+        .for_each(|f| {
+            match f {
+                Direction::Up(d) => aim -= d,
+                Direction::Down(d) => aim += d,
+                Direction::Forward(d) => {
+                    horizontal += d;
+                    vertical += aim * d;
+                }
+            }
+        });
 
     Ok((horizontal * vertical).to_string())
+}
+
+fn parse_lines(input: &str) -> Vec<Direction> {
+    let split_input = input.lines()
+        .map(|f| f.split_once(' ').unwrap())
+        .filter(|(a, _)| a == &"forward" || a == &"down" || a == &"up")
+        .map(|(a, b)| {
+            match a {
+                "forward" => Direction::Forward(b.parse().unwrap()),
+                "down" => Direction::Down(b.parse().unwrap()),
+                _ => Direction::Up(b.parse().unwrap()), // Since we cant have a wildcard match that returns unit value. The filter before however ensures that this logic will still be correct.
+            }
+        }).collect();
+    split_input
 }
 
 
