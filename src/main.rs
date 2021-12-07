@@ -39,6 +39,7 @@ fn main() {
     let part = matches.value_of("part").unwrap();
 
     
+    // TODO should probably convert to enum instead of string parsing
     let result = match day {
         "1" => {
             match part {
@@ -51,6 +52,13 @@ fn main() {
             match part {
                 "1" => adventofcode::days::day02::part1(input),
                 "2" => adventofcode::days::day02::part2(input),
+                _ => Err("Part not found")
+            }
+        },
+        "3" => {
+            match part {
+                "1" => adventofcode::days::day03::part1(input),
+                "2" => adventofcode::days::day03::part2(input),
                 _ => Err("Part not found")
             }
         }
